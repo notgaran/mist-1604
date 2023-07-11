@@ -1,10 +1,10 @@
-
+// JSON 데이터를 가져와 포스팅 목록을 생성하는 함수
 const headers = {
   'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
 }
 
-// JSON 데이터를 가져와 포스팅 목록을 생성하는 함수
+
 function generatePostList() {
   fetch('/getPosts', headers)
     .then(response => response.json())
@@ -15,7 +15,11 @@ function generatePostList() {
 
       posts.reverse().forEach(post => {
         const li = document.createElement('li');
-        //list로 포스팅 목록을 불러오는 부분을 작성하세요
+        li.innerHTML = `<h2>${post.title}</h2>
+                        <h4>작성자: ${post.name}</h4>
+                        <p class="contentFormat">${post.content}</p>
+                        <p class="timeFormat">${post.time}</p>`;
+        postList.appendChild(li);
       });
     })
     .catch(error => {
@@ -24,7 +28,7 @@ function generatePostList() {
 }
 
 
-//JSON 데이터를 가져와 시간표 테이블을 만드는 함수
+
 function generateTimetable() {
   fetch('/getTimetable', headers)
     .then(response => response.json())
@@ -40,7 +44,14 @@ function generateTimetable() {
       timetableList.appendChild(day);
 
       timetables.forEach(timetable => {
-        //오늘 시간표를 불러와 테이블로 만드는 부분을 작성하세요.
+        const tr = document.createElement('tr');
+        const timetd = document.createElement('td');
+        timetd.innerHTML = `${timetable.time}교시`;
+        tr.appendChild(timetd);
+        const subjecttd = document.createElement('td');
+        subjecttd.innerHTML = timetable.subject;
+        tr.appendChild(subjecttd);
+        timetableList.appendChild(tr);
       });
     })
     .catch(error => {
@@ -48,7 +59,7 @@ function generateTimetable() {
     });
 }
 
-// 페이지 로드 완료 시 포스팅 목록과 시간표 테이블을 생성
+// 페이지 로드 완료 시 포스팅 목록을 생성합니다
 window.addEventListener('load', () => {
   generatePostList();
   generateTimetable();
